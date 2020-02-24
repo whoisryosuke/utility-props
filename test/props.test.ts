@@ -38,4 +38,16 @@ describe('Width Prop', () => {
       new RegExp('--sui-component-width: 100%')
     );
   });
+
+  it('0.5 width', () => {
+    const mockComponent = {
+      ...baseComponent,
+      width: 0.5,
+    };
+
+    setup(['width'], 'component', mockComponent);
+    expect(mockComponent.el.style.cssText).toMatch(
+      new RegExp('--sui-component-width: 50%')
+    );
+  });
 });
