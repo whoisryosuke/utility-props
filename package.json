@@ -1,5 +1,5 @@
 {
-  "version": "0.1.0",
+  "version": "0.1.3",
   "license": "MIT",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
@@ -11,7 +11,8 @@
     "build": "tsdx build",
     "test": "tsdx test",
     "lint": "tsdx lint",
-    "prepare": "tsdx build"
+    "prepare": "tsdx build",
+    "publish": "tsdx build && npm publish"
   },
   "peerDependencies": {},
   "husky": {
