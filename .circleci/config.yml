@@ -1,4 +1,5 @@
 # Javascript Node CircleCI 2.0 configuration file
+# via: https://circleci.com/blog/announcing-our-next-generation-convenience-images-smaller-faster-more-deterministic/
 #
 # Check {{ '/2.0/language-javascript/' | docs_url }} for more details
 #
