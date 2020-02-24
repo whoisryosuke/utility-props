@@ -341,12 +341,16 @@ export function setCustomProperty(
 ) {
   const conversion = convertProps(propName);
 
-  if (isNameValid(propName, camelCaseNames)) {
-    throw new Error(`Invalid property name ${propName}`);
+  if (!isNameValid(propName, camelCaseNames)) {
+    throw new Error(
+      `Invalid property name "${propName}". No camel case exists, which means the prop isn't in our API. Check the docs for our supported list of props names (like 'font-size').`
+    );
   }
   const validName = camelCaseNames[propName];
-  if (isPropValid(validName, prop)) {
-    throw new Error(`Invalid property name ${validName}`);
+  if (!isPropValid(validName, prop)) {
+    throw new Error(
+      `Invalid property name "${validName}". Prop name doesn't exist in component props. Maybe add to component's props/attrributes.`
+    );
   }
   const validProp = prop[validName];
 
