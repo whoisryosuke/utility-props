@@ -1,4 +1,4 @@
-interface IUtilityProps {
+export interface IUtilityProps {
   /**
    * Responsive width
    */
@@ -164,7 +164,7 @@ interface IUtilityProps {
   flexDirection?: string;
 }
 
-interface IComponentProps extends IUtilityProps {
+export interface IComponentProps extends IUtilityProps {
   /**
    * Ref to component in DOM
    */
@@ -173,7 +173,7 @@ interface IComponentProps extends IUtilityProps {
   [key: string]: any;
 }
 
-interface ICSSProps {
+export interface ICSSProps {
   [key: string]: any;
 }
 
@@ -342,11 +342,11 @@ export function setCustomProperty(
   const conversion = convertProps(propName);
 
   if (isNameValid(propName, camelCaseNames)) {
-    throw new Error('Invalid property name');
+    throw new Error(`Invalid property name ${propName}`);
   }
   const validName = camelCaseNames[propName];
   if (isPropValid(validName, prop)) {
-    throw new Error('Invalid property name');
+    throw new Error(`Invalid property name ${validName}`);
   }
   const validProp = prop[validName];
 
