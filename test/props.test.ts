@@ -14,7 +14,7 @@ export interface IMockProps extends IUtilityProps {
  * Mock component to use in testing
  * mimics the DOM's native behavior of setting CSS properties
  */
-const baseComponent: IMockProps = {
+const baseComponent = (): IMockProps => ({
   el: {
     style: {
       cssText: '',
@@ -24,12 +24,12 @@ const baseComponent: IMockProps = {
       },
     },
   },
-};
+});
 
 describe('Width Prop', () => {
   it('100% width', () => {
     const mockComponent = {
-      ...baseComponent,
+      ...baseComponent(),
       width: '100%',
     };
 
@@ -41,7 +41,7 @@ describe('Width Prop', () => {
 
   it('0.5 width', () => {
     const mockComponent = {
-      ...baseComponent,
+      ...baseComponent(),
       width: 0.5,
     };
 
