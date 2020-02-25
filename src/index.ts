@@ -403,8 +403,8 @@ export function responsiveProps(
         `${customProperty}-${breakpoints[index]}`,
         conversion(currentValue, namespace)
       );
-      // Sets last array value to default breakpoint prop value
-      if (processProp.length - 1 === index) {
+      // Sets first array value (mobile) to default breakpoint prop value
+      if (index === 0) {
         prop.el.style.setProperty(
           `${customProperty}`,
           conversion(currentValue, namespace)
