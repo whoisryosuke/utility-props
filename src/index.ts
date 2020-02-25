@@ -411,14 +411,14 @@ export function responsiveProps(
         );
       }
     });
-  } else if (
-    typeof processProp === 'string' &&
-    (!processProp.includes('px') || !processProp.includes('em'))
-  ) {
+    // Check here for numbers to convert to percent
+    // e.g. 0.5 would return 50%
+  } else if (typeof processProp === 'number') {
     prop.el.style.setProperty(
       `${customProperty}`,
       conversion(processProp, namespace)
     );
+    // If user types "25%", "10em", etc -- return that
   } else if (processProp !== undefined) {
     prop.el.style.setProperty(`${customProperty}`, processProp);
   }
