@@ -248,7 +248,9 @@ const convertNumToPercent = (number: number | string) => {
 const convertColorToUnit = (color: string | any, namespace: string) => {
   if (
     typeof color === 'string' &&
-    (!color.includes('#') || !color.includes('hsl') || !color.includes('rgb'))
+    !color.includes('#') &&
+    !color.includes('hsl') &&
+    !color.includes('rgb')
   ) {
     return `var(--${namespace}-colors-${color})`;
   }
