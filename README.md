@@ -142,6 +142,9 @@ For props that can be responsive, you can provide an array as a value to change 
 // Renders a box that's 100% on mobile, 50% on tablet, and 30% on desktop.
 <x-box width={[1, 0.5, 0.3]}></x-box>
 <x-box width={['100%', '50%', '30%']}></x-box>
+// If your app doesn't support array-based props, you can use comma-separated values
+<x-box width="1,0.5,0.3"></x-box>
+<x-box width="100%,50%,30%"></x-box>
 ```
 
 To enable responsive props, you have to add CSS custom properties to your component for each breakpoint you define. By default the library uses **mobile**, **tablet**, and **desktop** viewports. You can define any name and any number of viewports you need. Here's an example of the required CSS for the default breakpoints:
