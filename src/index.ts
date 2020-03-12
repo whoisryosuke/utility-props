@@ -351,7 +351,7 @@ export function setCustomProperty(
   const validName = camelCaseNames[propName];
   if (!isPropValid(validName, prop)) {
     throw new Error(
-      `Invalid property name "${validName}". Prop name doesn't exist in component props. Maybe add to component's props/attrributes.`
+      `Invalid property name "${validName}". Prop name doesn't exist in component (${componentName}) props. Maybe add to component's props/attrributes.`
     );
   }
   const validProp = prop[validName];
@@ -391,6 +391,13 @@ export function responsiveProps(
   if (typeof processProp === 'string' && processProp.includes(',')) {
     processProp = processProp.split(',');
   }
+  console.log(
+    'component loaded',
+    componentName,
+    prop?.el?.shadowRoot,
+    prop?.el?.shadowRoot?.querySelector('style')
+  );
+  const componentStyleBlock = prop?.el?.shadowRoot?.querySelector('style');
   // Check if prop is an array we can loop through
   // Or sets prop to CSS var by default
   if (
@@ -414,12 +421,30 @@ export function responsiveProps(
     // Check here for numbers to convert to percent
     // e.g. 0.5 would return 50%
   } else if (typeof processProp === 'number') {
+    console.log(`number prop ${componentName}`);
+    if (componentStyleBlock) {
+      console.log(`replacing styles in ${componentName}`);
+      const regexSearch = new RegExp(`(${customProperty})(.*?);`);
+      const replaceCSS = `${customProperty}: ${conversion(
+        processProp,
+        namespace
+      )};`;
+      componentStyleBlock.innerHTML.replace(regexSearch, replaceCSS);
+    }
     prop.el.style.setProperty(
       `${customProperty}`,
       conversion(processProp, namespace)
     );
     // If user types "25%", "10em", etc -- return that
   } else if (processProp !== undefined) {
+    console.log(`undefined prop ${componentName}`);
+    if (componentStyleBlock) {
+      console.log(`replacing styles in ${componentName}`);
+      const regexSearch = new RegExp(`(${customProperty})(.*?);`);
+      const replaceCSS = `${customProperty}: ${processProp};`;
+      componentStyleBlock.innerHTML.replace(regexSearch, replaceCSS);
+    }
+
     prop.el.style.setProperty(`${customProperty}`, processProp);
   }
 }
