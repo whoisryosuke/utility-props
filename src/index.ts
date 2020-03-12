@@ -391,13 +391,7 @@ export function responsiveProps(
   if (typeof processProp === 'string' && processProp.includes(',')) {
     processProp = processProp.split(',');
   }
-  console.log(
-    'component loaded',
-    componentName,
-    prop?.el?.shadowRoot,
-    prop?.el?.shadowRoot?.querySelector('style')
-  );
-  const componentStyleBlock = prop?.el?.shadowRoot?.querySelector('style');
+  let componentStyleBlock = prop?.el?.shadowRoot?.querySelector('style');
   // Check if prop is an array we can loop through
   // Or sets prop to CSS var by default
   if (
@@ -405,7 +399,8 @@ export function responsiveProps(
     (Array.isArray(processProp) || typeof processProp === 'object')
   ) {
     // Loop through array and map props to breakpoint CSS vars
-    processProp.map((currentValue: string | number, index: number) => {
+    for (let index = 0; index < processProp.length; index++) {
+      const currentValue = processProp[index];
       prop.el.style.setProperty(
         `${customProperty}-${breakpoints[index]}`,
         conversion(currentValue, namespace)
@@ -417,13 +412,11 @@ export function responsiveProps(
           conversion(currentValue, namespace)
         );
       }
-    });
+    }
     // Check here for numbers to convert to percent
     // e.g. 0.5 would return 50%
   } else if (typeof processProp === 'number') {
-    console.log(`number prop ${componentName}`);
     if (componentStyleBlock) {
-      console.log(`replacing styles in ${componentName}`);
       const regexSearch = new RegExp(`(${customProperty})(.*?);`);
       const replaceCSS = `${customProperty}: ${conversion(
         processProp,
@@ -437,12 +430,19 @@ export function responsiveProps(
     );
     // If user types "25%", "10em", etc -- return that
   } else if (processProp !== undefined) {
-    console.log(`undefined prop ${componentName}`);
     if (componentStyleBlock) {
-      console.log(`replacing styles in ${componentName}`);
       const regexSearch = new RegExp(`(${customProperty})(.*?);`);
       const replaceCSS = `${customProperty}: ${processProp};`;
-      componentStyleBlock.innerHTML.replace(regexSearch, replaceCSS);
+      try {
+        let newStyles = componentStyleBlock.innerHTML?.replace(
+          regexSearch,
+          replaceCSS
+        );
+        console.log('styles swapped', newStyles);
+        componentStyleBlock.innerHTML = newStyles;
+      } catch (e) {
+        console.error('component style failed to attach', e);
+      }
     }
 
     prop.el.style.setProperty(`${customProperty}`, processProp);
