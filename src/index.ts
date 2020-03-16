@@ -217,6 +217,19 @@ const camelCaseNames: ICSSProps = {
   right: 'right',
 };
 
+const updateComponentStyleBlock = (
+  componentStyleBlock: HTMLStyleElement,
+  customProperty: string,
+  propValue: any
+) => {
+  const regexSearch = new RegExp(`(${customProperty})(.*?);`);
+  const replaceCSS = `${customProperty}: ${propValue};`;
+  componentStyleBlock.innerHTML = componentStyleBlock.innerHTML.replace(
+    regexSearch,
+    replaceCSS
+  );
+};
+
 /**
  * Converts number to percent
  * or returns the value (for units with px/em/etc)
@@ -342,6 +355,8 @@ export function setCustomProperty(
   propName: string
 ) {
   const conversion = convertProps(propName);
+  const customProperty = `--${namespace}-${componentName}-${propName}`;
+  let componentStyleBlock = prop?.el?.shadowRoot?.querySelector('style');
 
   if (!isNameValid(propName, camelCaseNames)) {
     throw new Error(
@@ -357,10 +372,15 @@ export function setCustomProperty(
   const validProp = prop[validName];
 
   if (validProp !== undefined) {
-    return prop.el.style.setProperty(
-      `--${namespace}-${componentName}-${propName}`,
-      conversion(validProp, namespace)
-    );
+    const propValue = conversion(validProp, namespace);
+
+    if (componentStyleBlock) {
+      return updateComponentStyleBlock(
+        componentStyleBlock,
+        customProperty,
+        propValue
+      );
+    }
   }
 }
 
@@ -385,13 +405,13 @@ export function responsiveProps(
   // Convert width/height to percent
   // Or convert to unit (em/px)
   const conversion = convertProps(propName);
+  let componentStyleBlock = prop?.el?.shadowRoot?.querySelector('style');
 
   // If string is comma separated, process into array
   let processProp = prop[camelCaseNames[propName]];
   if (typeof processProp === 'string' && processProp.includes(',')) {
     processProp = processProp.split(',');
   }
-  let componentStyleBlock = prop?.el?.shadowRoot?.querySelector('style');
   // Check if prop is an array we can loop through
   // Or sets prop to CSS var by default
   if (
@@ -400,52 +420,42 @@ export function responsiveProps(
   ) {
     // Loop through array and map props to breakpoint CSS vars
     for (let index = 0; index < processProp.length; index++) {
-      const currentValue = processProp[index];
-      prop.el.style.setProperty(
-        `${customProperty}-${breakpoints[index]}`,
-        conversion(currentValue, namespace)
-      );
-      // Sets first array value (mobile) to default breakpoint prop value
-      if (index === 0) {
-        prop.el.style.setProperty(
-          `${customProperty}`,
-          conversion(currentValue, namespace)
+      if (componentStyleBlock) {
+        const currentValue = processProp[index];
+        const propValue = conversion(currentValue, namespace);
+        updateComponentStyleBlock(
+          componentStyleBlock,
+          `${customProperty}-${breakpoints[index]}`,
+          propValue
         );
+        // Sets first array value (mobile) to default breakpoint prop value
+        if (index === 0) {
+          updateComponentStyleBlock(
+            componentStyleBlock,
+            customProperty,
+            propValue
+          );
+        }
       }
     }
     // Check here for numbers to convert to percent
     // e.g. 0.5 would return 50%
   } else if (typeof processProp === 'number') {
+    // Replace CSS Custom Property in Style Block with Regex
+    const propValue = conversion(processProp, namespace);
     if (componentStyleBlock) {
-      const regexSearch = new RegExp(`(${customProperty})(.*?);`);
-      const replaceCSS = `${customProperty}: ${conversion(
-        processProp,
-        namespace
-      )};`;
-      componentStyleBlock.innerHTML.replace(regexSearch, replaceCSS);
+      updateComponentStyleBlock(componentStyleBlock, customProperty, propValue);
     }
-    prop.el.style.setProperty(
-      `${customProperty}`,
-      conversion(processProp, namespace)
-    );
     // If user types "25%", "10em", etc -- return that
   } else if (processProp !== undefined) {
+    // Replace CSS Custom Property in Style Block with Regex
     if (componentStyleBlock) {
-      const regexSearch = new RegExp(`(${customProperty})(.*?);`);
-      const replaceCSS = `${customProperty}: ${processProp};`;
-      try {
-        let newStyles = componentStyleBlock.innerHTML?.replace(
-          regexSearch,
-          replaceCSS
-        );
-        console.log('styles swapped', newStyles);
-        componentStyleBlock.innerHTML = newStyles;
-      } catch (e) {
-        console.error('component style failed to attach', e);
-      }
+      updateComponentStyleBlock(
+        componentStyleBlock,
+        customProperty,
+        processProp
+      );
     }
-
-    prop.el.style.setProperty(`${customProperty}`, processProp);
   }
 }
 

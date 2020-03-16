@@ -86,6 +86,89 @@ Here are the following CSS properties you can use a "utility props":
 - flex-wrap
 - flex-direction
 
+### Default CSS Custom Properties
+
+```css
+:host {
+  --sui-box-width: inherit;
+  --sui-box-min-width: inherit;
+  --sui-box-max-width: inherit;
+  --sui-box-height: inherit;
+  --sui-box-max-height: inherit;
+  --sui-box-min-height: inherit;
+  --sui-box-padding: inherit;
+  --sui-box-margin: inherit;
+
+  --sui-box-display: inherit;
+  --sui-box-position: inherit;
+  --sui-box-zIndex: inherit;
+  --sui-box-top: inherit;
+  --sui-box-bottom: inherit;
+  --sui-box-left: inherit;
+  --sui-box-right: inherit;
+
+  --sui-box-color: inherit;
+  --sui-box-background-color: inherit;
+
+  --sui-box-font-family: inherit;
+  --sui-box-font-size: inherit;
+  --sui-box-text-align: inherit;
+  --sui-box-line-height: inherit;
+  --sui-box-font-weight: inherit;
+  --sui-box-letter-spacing: inherit;
+
+  --sui-box-border-width: inherit;
+  --sui-box-border-style: inherit;
+  --sui-box-border-color: inherit;
+  --sui-box-border: inherit;
+  --sui-box-border-top: inherit;
+  --sui-box-border-bottom: inherit;
+  --sui-box-border-left: inherit;
+  --sui-box-border-right: inherit;
+  --sui-box-border-radius: inherit;
+
+  --sui-box-align-items: inherit;
+  --sui-box-align-content: inherit;
+  --sui-box-justify-content: inherit;
+  --sui-box-flex-direction: inherit;
+  --sui-box-flex-wrap: inherit;
+
+  /** Define for each breakpoint. Defaults to mobile, tablet, desktop **/
+  --sui-box-width-mobile: var(--sui-box-width);
+  --sui-box-max-width-mobile: var(--sui-box-max-width);
+  --sui-box-min-width-mobile: var(--sui-box-min-width);
+  --sui-box-height-mobile: var(--sui-box-height);
+  --sui-box-max-height-mobile: var(--sui-box-max-height);
+  --sui-box-min-height-mobile: var(--sui-box-min-height);
+  --sui-box-padding-mobile: var(--sui-box-padding);
+  --sui-box-margin-mobile: var(--sui-box-margin);
+  --sui-box-font-size-mobile: var(--sui-box-font-size);
+  --sui-box-text-align-mobile: var(--sui-box-text-align);
+
+  --sui-box-width-tablet: var(--sui-box-width);
+  --sui-box-max-width-tablet: var(--sui-box-max-width);
+  --sui-box-min-width-tablet: var(--sui-box-min-width);
+  --sui-box-height-tablet: var(--sui-box-height);
+  --sui-box-max-height-tablet: var(--sui-box-max-height);
+  --sui-box-min-height-tablet: var(--sui-box-min-height);
+  --sui-box-padding-tablet: var(--sui-box-padding);
+  --sui-box-margin-tablet: var(--sui-box-margin);
+  --sui-box-font-size-tablet: var(--sui-box-font-size);
+  --sui-box-text-align-tablet: var(--sui-box-text-align);
+
+  --sui-box-width-desktop: var(--sui-box-width);
+  --sui-box-max-width-desktop: var(--sui-box-max-width);
+  --sui-box-min-width-desktop: var(--sui-box-min-width);
+  --sui-box-height-desktop: var(--sui-box-height);
+  --sui-box-max-height-desktop: var(--sui-box-max-height);
+  --sui-box-min-height-desktop: var(--sui-box-min-height);
+  --sui-box-padding-desktop: var(--sui-box-padding);
+  --sui-box-margin-desktop: var(--sui-box-margin);
+  --sui-box-font-size-desktop: var(--sui-box-font-size);
+  --sui-box-text-align-desktop: var(--sui-box-text-align);
+}
+```
+
 ## How It Works
 
 You call the setup function as part of the web component's lifecycle, ideally running each time a prop changes. The setup checks for each CSS prop you provide, parses the prop value into a CSS custom property, and attaches it to the web component's inline style block. The custom property is derived by the component name your provide, as well as an optional namespace parameter in the setup function. There's a bit more that happens behind the scenes to parse or convert your prop values, like handling colors or spacing, you can learn more about that below.
